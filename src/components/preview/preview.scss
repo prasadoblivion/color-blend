@@ -1,7 +1,7 @@
 .preview-container {
   position: relative;
   width: 100%;
-  max-height: 350px;
+  max-height: 300px;
   height: 50vh;
   background-image: url("../../assets/img/fake_transparency.svg");
   background-color: #ffffff;
@@ -14,7 +14,7 @@
   .preview {
     position: relative;
     z-index: 15;
-    transition: all 0.5s ease-in-out;
+    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
     opacity: 1;
     transform-origin: right;
 
@@ -32,4 +32,11 @@
     left: 0%;
     z-index: 10;
   }
+}
+
+#gradientTypeBtn {
+  z-index: 25;
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
 }

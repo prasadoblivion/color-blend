@@ -1,10 +1,11 @@
 const initialState = [
   {
     colorList: [
-      { r: 103, g: 58, b: 183, a: 1 },
-      { r: 156, g: 39, b: 176, a: 1 }
+      { r: 85, g: 16, b: 206, a: 1 },
+      { r: 216, g: 21, b: 203, a: 1 },
+      { r: 222, g: 216, b: 21, a: 1 }
     ],
-    showGradient: false,
+    showGradient: true,
     showCode: false,
     gradientOutput: null,
     gradientAngle: "90",
@@ -24,6 +25,8 @@ const rootReducer = (state = initialState, action) => {
       return [{ ...state[0], gradientAngle: action.payload }];
     case "GRADIENT_TYPE_CHANGE":
       return [{ ...state[0], gradientType: action.payload }];
+    case "GRADIENT_GENERATED":
+      return [{ ...state[0], gradientOutput: action.payload }];
     default:
       return state;
   }

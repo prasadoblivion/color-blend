@@ -1,11 +1,16 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import { connect } from "react-redux";
+import { hexToRgb } from "../../utilities/rgbToHex";
+import { Modal } from "react-bootstrap";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 import "./controlPanel.scss";
 
-class Controlpanel extends Component {
+class Controlpanel extends PureComponent {
   state = {
-    blendText: "Blend",
-    gradientTypeText: "Radial"
+    blendText: "Unblend",
+    modalShow: false,
+    valueCopiedStatus: false,
+    valueCopied: ""
   };
 
   handleBlendBtnClick = () => {
@@ -22,14 +27,39 @@ class Controlpanel extends Component {
     this.props.onGradientAngleChange(parseFloat(e.target.value));
   };
 
-  handleGradientTypeChange = () => {
-    if (this.props.gradientType === "linear") {
-      this.props.onGradientTypeChange("radial");
-      this.setState({ gradientTypeText: "Linear" });
+  handleAddColor = () => {
+    const initialColors = this.props.colorList;
+    if (initialColors.length >= 5) {
+      alert("Sorry, not more than 5 colors are allowed.");
     } else {
-      this.props.onGradientTypeChange("linear");
-      this.setState({ gradientTypeText: "Radial" });
+      var randomColor = "#000000".replace(/0/g, function() {
+        return (~~(Math.random() * 16)).toString(16);
+      });
+
+      const newColors = [...initialColors, { r: hexToRgb(randomColor).r, g: hexToRgb(randomColor).g, b: hexToRgb(randomColor).b, a: 1 }];
+
+      this.props.onAddColor(newColors);
     }
+  };
+
+  handleModalShow = () => {
+    this.setState({ modalShow: true });
+
+    setTimeout(() => {
+      this.setState({ valueCopied: document.getElementById("codeToCopy").textContent });
+    }, 1000);
+  };
+
+  handleModalClose = () => {
+    this.setState({ modalShow: false });
+  };
+
+  handleCopyCodeBtnClick = () => {
+    this.setState({ valueCopied: document.getElementById("codeToCopy").textContent });
+
+    setTimeout(() => {
+      this.setState({ valueCopiedStatus: false, valueCopied: "" });
+    }, 2000);
   };
 
   render() {
@@ -48,7 +78,7 @@ class Controlpanel extends Component {
         <div className="d-flex control-panel">
           <div>
             <label htmlFor="gradientAngle" id="gradientAngleLabel">
-              Angle {this.props.gradientAngle}
+              Angle <strong>{this.props.gradientAngle}</strong>
               <sup>o</sup>
             </label>
           </div>
@@ -61,15 +91,36 @@ class Controlpanel extends Component {
               {this.state.blendText}
             </button>
 
-            <button className="btn btn-primary" id="blendBtn" onClick={this.handleGradientTypeChange}>
-              {this.state.gradientTypeText}
+            <button className="btn btn-primary" id="AddColorBtn" onClick={this.handleAddColor}>
+              Add color
             </button>
 
-            <button className="btn btn-primary" id="getCodeBtn">
-              Get code
+            <button className="btn btn-primary" id="getCodeBtn" title="Get code" aria-label="Get code" onClick={this.handleModalShow}>
+              <span aria-hidden="true">&lt;/&gt;</span>
             </button>
           </div>
         </div>
+
+        <Modal size="lg" centered show={this.state.modalShow} onHide={this.handleModalClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Code: CSS background gradient</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div id="codeToCopy">
+              <code>
+                <p>{this.props.gradientOutput !== null ? this.props.gradientOutput[0] : null}</p>
+                <p>{this.props.gradientOutput !== null ? this.props.gradientOutput[1] : null}</p>
+              </code>
+            </div>
+          </Modal.Body>
+          <Modal.Footer>
+            <CopyToClipboard text={this.state.valueCopied} onCopy={() => this.setState({ valueCopiedStatus: true })}>
+              <button className="btn btn-primary" onClick={this.handleCopyCodeBtnClick}>
+                {this.state.valueCopiedStatus ? "Copied!" : "Copy code"}
+              </button>
+            </CopyToClipboard>
+          </Modal.Footer>
+        </Modal>
       </React.Fragment>
     );
   }
@@ -80,7 +131,8 @@ const mapStateToProps = state => {
     colorList: state[0].colorList,
     showGradient: state[0].showGradient,
     gradientAngle: state[0].gradientAngle,
-    gradientType: state[0].gradientType
+    gradientType: state[0].gradientType,
+    gradientOutput: state[0].gradientOutput
   };
 };
 
@@ -92,8 +144,8 @@ const mapDispatchToProps = dispatch => {
     onGradientAngleChange: inputData => {
       dispatch({ type: "CHANGE_ANGLE", payload: inputData });
     },
-    onGradientTypeChange: inputData => {
-      dispatch({ type: "GRADIENT_TYPE_CHANGE", payload: inputData });
+    onAddColor: inputData => {
+      dispatch({ type: "ADD_COLOR", payload: inputData });
     }
   };
 };

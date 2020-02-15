@@ -5,16 +5,8 @@ import Topnav from "./components/topnav/topnav";
 import Preview from "./components/preview/preview";
 import Controlpanel from "./components/controlPanel/controlPanel";
 import { ChromePicker } from "react-color";
-import { hexToRgb } from "./utilities/rgbToHex";
-// import {SortableContainer, SortableElement} from 'react-sortable-hoc';
 
 class App extends Component {
-  // state = {
-  //   background: []
-  // };
-
-  // dynamicBackgroundColors = [];
-
   handleChangeComplete = (color, index, targetEle) => {
     const dynamicBackgroundColors = [...this.props.colorList];
     dynamicBackgroundColors[index].r = color.rgb.r;
@@ -24,17 +16,6 @@ class App extends Component {
 
     document.getElementById(targetEle).style.backgroundColor = `rgba(${color.rgb.r},${color.rgb.g},${color.rgb.b},${color.rgb.a})`;
     this.props.onColorChange(dynamicBackgroundColors);
-  };
-
-  handleAddColor = () => {
-    var randomColor = "#000000".replace(/0/g, function() {
-      return (~~(Math.random() * 16)).toString(16);
-    });
-
-    const initialColors = this.props.colorList;
-    const newColors = [...initialColors, { r: hexToRgb(randomColor).r, g: hexToRgb(randomColor).g, b: hexToRgb(randomColor).b, a: 1 }];
-
-    this.props.onAddColor(newColors);
   };
 
   render() {
@@ -57,9 +38,10 @@ class App extends Component {
         </header>
         <main>
           <Preview />
-          <Controlpanel />
-          <div className="color-picker-container">{colorPickers}</div>
-          <button onClick={this.handleAddColor}>Add</button>
+          <div className="control-container">
+            <Controlpanel />
+            <div className="color-picker-container">{colorPickers}</div>
+          </div>
         </main>
       </div>
     );
@@ -74,9 +56,6 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onAddColor: inputData => {
-      dispatch({ type: "ADD_COLOR", payload: inputData });
-    },
     onColorChange: inputData => {
       dispatch({ type: "UPDATE_COLOR", payload: inputData });
     }
