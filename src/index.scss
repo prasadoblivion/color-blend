@@ -1,0 +1,37 @@
+@import url("https://fonts.googleapis.com/css?family=Titillium+Web:400,700&display=swap");
+@import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
+
+:root {
+  --app-primary-color: #9b00dc;
+  --app-primary-dark-color: #8a00c4;
+  --app-primary-shadow-color: rgba(138, 0, 196, 0.5);
+}
+
+body {
+  margin: 0;
+  font-family: "Titillium Web", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  > * {
+    font-family: "Titillium Web", sans-serif;
+  }
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+body {
+  background-color: #ffffff;
+}
+
+.chrome-picker {
+  > * {
+    font-family: "Titillium Web", sans-serif !important;
+  }
+}
+
+.btn {
+  border-radius: 0px;
+}

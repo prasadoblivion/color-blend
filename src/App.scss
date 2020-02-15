@@ -1,0 +1,142 @@
+.slider {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 100%;
+  height: 10px;
+  outline: none;
+  transition: opacity 0.2s;
+  -webkit-transition: opacity 0.2s;
+  -moz-transition: opacity 0.2s;
+  margin: auto;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  background: #ffffff;
+  border-color: transparent;
+  color: transparent;
+
+  box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.25);
+  -webkit-box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.25);
+
+  &:focus {
+    outline: none;
+  }
+
+  &:disabled {
+    opacity: 0.2;
+    pointer-events: none;
+  }
+}
+
+//for chrome, safari
+.slider::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  background: var(--app-primary-color);
+  cursor: pointer;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.slider:hover::-webkit-slider-thumb,
+.slider:focus::-webkit-slider-thumb {
+  width: 25px;
+  height: 25px;
+  background-color: var(--app-primary-color);
+}
+
+//for firefox
+.slider::-moz-range-thumb {
+  appearance: none;
+  -moz-appearance: none;
+  width: 20px;
+  height: 20px;
+  background: var(--app-primary-color);
+  cursor: pointer;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.slider:hover::-moz-range-thumb,
+.slider:focus::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  background-color: var(--app-primary-color);
+}
+
+//for IE
+@supports (-ms-ime-align: auto) {
+  .slider {
+    height: unset;
+    box-shadow: unset;
+  }
+}
+
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+  .slider {
+    height: 30px;
+    box-shadow: inset 0 0 0px #9e9e9e;
+  }
+}
+
+.slider::-ms-track {
+  appearance: none;
+  width: 100%;
+  height: 10px;
+  outline: none;
+  transition: opacity 0.2s;
+  margin: auto;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-radius: 0px;
+  background: #ffffff;
+  border-color: transparent;
+  color: transparent;
+  transform: scale(1) !important;
+  box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.25);
+}
+
+.slider::-ms-thumb {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: var(--app-primary-color);
+  cursor: pointer;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  transform: scale(1) !important;
+  transition: all 0.3s ease;
+}
+
+.slider:hover::-ms-thumb,
+.slider:focus::-ms-thumb {
+  width: 25px;
+  height: 25px;
+  background-color: var(--app-primary-color);
+}
+
+.btn {
+  &.btn-primary {
+    background-color: var(--app-primary-color);
+    border-color: var(--app-primary-color);
+
+    &:hover,
+    &:focus,
+    &:active {
+      background-color: var(--app-primary-dark-color) !important;
+      border-color: var(--app-primary-dark-color) !important;
+    }
+
+    &:focus,
+    &:active {
+      box-shadow: 0 0 0 0.2rem var(--app-primary-shadow-color) !important;
+    }
+  }
+}
+
+.color-picker-container {
+  display: flex;
+}
