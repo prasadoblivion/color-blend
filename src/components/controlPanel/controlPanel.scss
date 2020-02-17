@@ -1,6 +1,6 @@
 .control-panel {
   width: 80%;
-  max-width: 650px;
+  max-width: 500px;
   padding: 1rem;
   background-color: #ffffff;
   border: 1px solid #eeeeee;
@@ -8,7 +8,7 @@
   margin: auto;
   position: relative;
   align-items: center;
-  margin-bottom: 2rem;
+  margin-bottom: 4rem;
   box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px;
   flex-wrap: wrap;
   z-index: 20;
@@ -30,10 +30,6 @@
         }
       }
     }
-
-    // &:nth-child(2) {
-    //   max-width: 200px;
-    // }
 
     &:not(:last-child) {
       margin-right: 1rem;

@@ -1,13 +1,12 @@
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
-import { hexToRgb } from "../../utilities/rgbToHex";
 import { Modal } from "react-bootstrap";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import "./controlPanel.scss";
 
 class Controlpanel extends PureComponent {
   state = {
-    blendText: "Unblend",
+    blendText: "Blend",
     modalShow: false,
     valueCopiedStatus: false,
     valueCopied: ""
@@ -25,21 +24,6 @@ class Controlpanel extends PureComponent {
 
   handleAngleChange = e => {
     this.props.onGradientAngleChange(parseFloat(e.target.value));
-  };
-
-  handleAddColor = () => {
-    const initialColors = this.props.colorList;
-    if (initialColors.length >= 5) {
-      alert("Sorry, not more than 5 colors are allowed.");
-    } else {
-      var randomColor = "#000000".replace(/0/g, function() {
-        return (~~(Math.random() * 16)).toString(16);
-      });
-
-      const newColors = [...initialColors, { r: hexToRgb(randomColor).r, g: hexToRgb(randomColor).g, b: hexToRgb(randomColor).b, a: 1 }];
-
-      this.props.onAddColor(newColors);
-    }
   };
 
   handleModalShow = () => {
@@ -87,12 +71,8 @@ class Controlpanel extends PureComponent {
           </div>
 
           <div className="btn-container">
-            <button className="btn btn-primary" id="blendBtn" onClick={this.handleBlendBtnClick}>
-              {this.state.blendText}
-            </button>
-
-            <button className="btn btn-primary" id="AddColorBtn" onClick={this.handleAddColor}>
-              Add color
+            <button className="btn btn-primary" id="blendBtn" onClick={this.handleBlendBtnClick} title={this.state.blendText + " colors"} aria-label={this.state.blendText + " colors"}>
+              <span aria-hidden="true"> {this.state.blendText}</span>
             </button>
 
             <button className="btn btn-primary" id="getCodeBtn" title="Get code" aria-label="Get code" onClick={this.handleModalShow}>
@@ -143,9 +123,6 @@ const mapDispatchToProps = dispatch => {
     },
     onGradientAngleChange: inputData => {
       dispatch({ type: "CHANGE_ANGLE", payload: inputData });
-    },
-    onAddColor: inputData => {
-      dispatch({ type: "ADD_COLOR", payload: inputData });
     }
   };
 };

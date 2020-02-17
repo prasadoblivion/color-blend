@@ -3,76 +3,77 @@ import { connect } from "react-redux";
 import "./preview.scss";
 
 class Preview extends PureComponent {
-  state = {
-    gradientTypeText: "Radial"
-  };
-
   generatedGradient = null;
 
-  componentDidMount() {
+  storeGeneratedGradient = () => {
     let gradientStyleLineOne = null;
     let gradientStyleLineTwo = null;
 
     if (this.props.gradientType === "linear") {
-      gradientStyleLineOne = `backgroundImage: linear-gradient(${this.props.gradientAngle}deg , ${this.generatedGradient});`;
-      gradientStyleLineTwo = `backgroundImage: -webkit-linear-gradient(${this.props.gradientAngle}deg , ${this.generatedGradient});`;
-    } else {
-      gradientStyleLineOne = `backgroundImage: radial-gradient(${this.generatedGradient});`;
-      gradientStyleLineTwo = `backgroundImage: -webkit-radial-gradient(${this.generatedGradient});`;
+      gradientStyleLineOne = `backgroundImage: linear-gradient(${this.props.gradientAngle}deg, ${this.generatedGradient});`;
+      gradientStyleLineTwo = `backgroundImage: -webkit-linear-gradient(${this.props.gradientAngle}deg, ${this.generatedGradient});`;
+    } else if (this.props.gradientType === "radial") {
+      gradientStyleLineOne = `backgroundImage: radial-gradient(circle, ${this.generatedGradient});`;
+      gradientStyleLineTwo = `backgroundImage: -webkit-radial-gradient(circle, ${this.generatedGradient});`;
+    } else if (this.props.gradientType === "conic") {
+      const firstColor = `rgba(${this.props.colorList[0].r}, ${this.props.colorList[0].g}, ${this.props.colorList[0].b}, ${this.props.colorList[0].a})`;
+      gradientStyleLineOne = `backgroundImage: conic-gradient(from ${this.props.gradientAngle}deg, ${this.generatedGradient}, ${firstColor});`;
+      gradientStyleLineTwo = `backgroundImage: -webkit-conic-gradient(from ${this.props.gradientAngle}deg, ${this.generatedGradient}, ${firstColor});`;
     }
 
     this.props.onGradientGenerated([gradientStyleLineOne, gradientStyleLineTwo]);
+  };
+
+  componentDidMount() {
+    this.storeGeneratedGradient();
   }
 
   componentDidUpdate() {
-    let gradientStyleLineOne = null;
-    let gradientStyleLineTwo = null;
-
-    if (this.props.gradientType === "linear") {
-      gradientStyleLineOne = `backgroundImage: linear-gradient(${this.props.gradientAngle}deg , ${this.generatedGradient});`;
-      gradientStyleLineTwo = `backgroundImage: -webkit-linear-gradient(${this.props.gradientAngle}deg , ${this.generatedGradient});`;
-    } else {
-      gradientStyleLineOne = `backgroundImage: radial-gradient(${this.generatedGradient});`;
-      gradientStyleLineTwo = `backgroundImage: -webkit-radial-gradient(${this.generatedGradient});`;
-    }
-
-    this.props.onGradientGenerated([gradientStyleLineOne, gradientStyleLineTwo]);
+    this.storeGeneratedGradient();
   }
 
-  handleGradientTypeChange = () => {
-    if (this.props.gradientType === "linear") {
-      this.props.onGradientTypeChange("radial");
-      this.setState({ gradientTypeText: "Linear" });
-    } else {
-      this.props.onGradientTypeChange("linear");
-      this.setState({ gradientTypeText: "Radial" });
-    }
+  handleGradientTypeChange = e => {
+    this.props.onGradientTypeChange(e.target.value);
   };
 
   render() {
     let gradientBG = "";
-
     const previews = this.props.colorList.map((item, index) => {
-      const currentColor = `rgba(${item.r},${item.g},${item.b},${item.a})`;
-      gradientBG = gradientBG + currentColor + ", ";
-      return <div className={this.props.showGradient === true ? "preview hide" : "preview"} key={index} id={"colorPicker_" + index} style={{ backgroundColor: currentColor }}></div>;
+      const currentColor = `rgba(${item.r}, ${item.g}, ${item.b}, ${item.a})`;
+      gradientBG = `${gradientBG}rgba(${item.r}, ${item.g}, ${item.b}, ${item.a}), `;
+      return <div className={this.props.showGradient === true ? "preview hide" : "preview"} key={index + "_" + item.r + "" + item.g + "" + item.b + "" + item.a} id={"colorPicker_" + index} style={{ backgroundColor: currentColor }}></div>;
     });
 
     this.generatedGradient = gradientBG.slice(0, -2);
 
     let gradientStyle = null;
     if (this.props.gradientType === "linear") {
-      gradientStyle = { backgroundImage: `linear-gradient(${this.props.gradientAngle}deg , ${gradientBG.slice(0, -2)})` };
-    } else {
-      gradientStyle = { backgroundImage: `radial-gradient(${gradientBG.slice(0, -2)})` };
+      gradientStyle = { backgroundImage: `linear-gradient(${this.props.gradientAngle}deg, ${gradientBG.slice(0, -2)})` };
+    } else if (this.props.gradientType === "radial") {
+      gradientStyle = { backgroundImage: `radial-gradient(circle, ${gradientBG.slice(0, -2)})` };
+    } else if (this.props.gradientType === "conic") {
+      const firstColor = `rgba(${this.props.colorList[0].r}, ${this.props.colorList[0].g}, ${this.props.colorList[0].b}, ${this.props.colorList[0].a})`;
+      gradientStyle = { backgroundImage: `conic-gradient(from ${this.props.gradientAngle}deg, ${gradientBG.slice(0, -2)}, ${firstColor})` };
     }
 
     return (
       <div className="preview-container">
-        <button className="btn btn-primary" id="gradientTypeBtn" onClick={this.handleGradientTypeChange}>
-          {this.state.gradientTypeText}
-        </button>
-        <div className="preview-gradient" style={gradientStyle}></div>
+        <label htmlFor="gradientTypeBtn" className="gradientTypeBtn-label">
+          Gradient type
+        </label>
+        <select className="form-control btn btn-primary" id="gradientTypeBtn" onChange={this.handleGradientTypeChange} style={{ visibility: this.props.showGradient === true ? "visible" : "hidden" }}>
+          <option value="linear">Linear</option>
+          <option value="radial">Radial</option>
+          <option value="conic">Conic</option>
+        </select>
+
+        <div className="preview-gradient" style={gradientStyle}>
+          {this.props.gradientType === "conic" ? (
+            <span className="no-conic-support">
+              <sup>*</sup>Firefox, IE do not support conic gradients.
+            </span>
+          ) : null}
+        </div>
         {previews}
       </div>
     );

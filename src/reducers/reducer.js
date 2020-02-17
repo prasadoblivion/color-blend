@@ -1,24 +1,30 @@
 const initialState = [
   {
     colorList: [
-      { r: 85, g: 16, b: 206, a: 1 },
-      { r: 216, g: 21, b: 203, a: 1 },
-      { r: 222, g: 216, b: 21, a: 1 }
+      { r: 255, g: 93, b: 4, a: 1 },
+      { r: 255, g: 119, b: 0, a: 1 },
+      { r: 255, g: 170, b: 0, a: 1 },
+      { r: 255, g: 191, b: 63, a: 1 }
     ],
-    showGradient: true,
+    showGradient: false,
     showCode: false,
     gradientOutput: null,
     gradientAngle: "90",
-    gradientType: "linear"
+    gradientType: "linear",
+    colorPicker: {
+      show: false,
+      currentIndex: 0,
+      position: { x: 0, y: 0 }
+    }
   }
 ];
 
 const rootReducer = (state = initialState, action) => {
   switch (action.type) {
-    case "ADD_COLOR":
-      return [{ ...state[0], colorList: action.payload }];
     case "UPDATE_COLOR":
-      return [{ ...state[0], colorList: action.payload }];
+      return [{ ...state[0], colorList: [...action.payload] }];
+    case "DELETE_COLOR":
+      return [{ ...state[0], colorList: [...action.payload[0]], colorPicker: { ...action.payload[1] } }];
     case "BLEND_COLORS":
       return [{ ...state[0], showGradient: action.payload }];
     case "CHANGE_ANGLE":
@@ -27,6 +33,8 @@ const rootReducer = (state = initialState, action) => {
       return [{ ...state[0], gradientType: action.payload }];
     case "GRADIENT_GENERATED":
       return [{ ...state[0], gradientOutput: action.payload }];
+    case "TOGGLE_COLOR_PICKER":
+      return [{ ...state[0], colorPicker: { ...action.payload } }];
     default:
       return state;
   }

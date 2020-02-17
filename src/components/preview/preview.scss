@@ -35,8 +35,31 @@
 }
 
 #gradientTypeBtn {
-  z-index: 25;
+  max-width: 100px;
   position: absolute;
+  z-index: 12;
   top: 1.5rem;
+  right: 1.5rem;
+  border: none !important;
+  outline: none !important;
+  transition: visibility 0.5s ease-in-out;
+}
+
+.no-conic-support {
+  position: absolute;
+  right: 1.5rem;
+  top: 20rem;
+  font-size: 0.9rem;
+
+  > sup {
+    font-weight: bold;
+    color: #f44336;
+  }
+}
+
+.gradientTypeBtn-label {
+  opacity: 0;
+  position: absolute;
+  top: 0rem;
   right: 1.5rem;
 }
