@@ -10,15 +10,15 @@ class Preview extends PureComponent {
     let gradientStyleLineTwo = null;
 
     if (this.props.gradientType === "linear") {
-      gradientStyleLineOne = `backgroundImage: linear-gradient(${this.props.gradientAngle}deg, ${this.generatedGradient});`;
-      gradientStyleLineTwo = `backgroundImage: -webkit-linear-gradient(${this.props.gradientAngle}deg, ${this.generatedGradient});`;
+      gradientStyleLineOne = `background-image: linear-gradient(${this.props.gradientAngle}deg, ${this.generatedGradient});`;
+      gradientStyleLineTwo = `background-image: -webkit-linear-gradient(${this.props.gradientAngle}deg, ${this.generatedGradient});`;
     } else if (this.props.gradientType === "radial") {
-      gradientStyleLineOne = `backgroundImage: radial-gradient(circle, ${this.generatedGradient});`;
-      gradientStyleLineTwo = `backgroundImage: -webkit-radial-gradient(circle, ${this.generatedGradient});`;
+      gradientStyleLineOne = `background-image: radial-gradient(circle, ${this.generatedGradient});`;
+      gradientStyleLineTwo = `background-image: -webkit-radial-gradient(circle, ${this.generatedGradient});`;
     } else if (this.props.gradientType === "conic") {
       const firstColor = `rgba(${this.props.colorList[0].r}, ${this.props.colorList[0].g}, ${this.props.colorList[0].b}, ${this.props.colorList[0].a})`;
-      gradientStyleLineOne = `backgroundImage: conic-gradient(from ${this.props.gradientAngle}deg, ${this.generatedGradient}, ${firstColor});`;
-      gradientStyleLineTwo = `backgroundImage: -webkit-conic-gradient(from ${this.props.gradientAngle}deg, ${this.generatedGradient}, ${firstColor});`;
+      gradientStyleLineOne = `background-image: conic-gradient(from ${this.props.gradientAngle}deg, ${this.generatedGradient}, ${firstColor});`;
+      gradientStyleLineTwo = `background-image: -webkit-conic-gradient(from ${this.props.gradientAngle}deg, ${this.generatedGradient}, ${firstColor});`;
     }
 
     this.props.onGradientGenerated([gradientStyleLineOne, gradientStyleLineTwo]);
@@ -32,7 +32,7 @@ class Preview extends PureComponent {
     this.storeGeneratedGradient();
   }
 
-  handleGradientTypeChange = e => {
+  handleGradientTypeChange = (e) => {
     this.props.onGradientTypeChange(e.target.value);
   };
 
@@ -80,23 +80,23 @@ class Preview extends PureComponent {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     colorList: state[0].colorList,
     showGradient: state[0].showGradient,
     gradientAngle: state[0].gradientAngle,
-    gradientType: state[0].gradientType
+    gradientType: state[0].gradientType,
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    onGradientGenerated: inputData => {
+    onGradientGenerated: (inputData) => {
       dispatch({ type: "GRADIENT_GENERATED", payload: inputData });
     },
-    onGradientTypeChange: inputData => {
+    onGradientTypeChange: (inputData) => {
       dispatch({ type: "GRADIENT_TYPE_CHANGE", payload: inputData });
-    }
+    },
   };
 };
 
