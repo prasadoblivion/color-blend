@@ -12,7 +12,7 @@ class Topnav extends Component {
         </span>
 
         <div className="navbar-nav ml-auto">
-          <a className="nav-item nav-link active" href="https://prasaddasanatti.tech/" target="_blank" rel="noopener noreferrer">
+          <a className="nav-item nav-link active" href="https://prasaddasanatti.in/" target="_blank" rel="noopener noreferrer">
             About
           </a>
         </div>
